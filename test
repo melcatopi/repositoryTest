@@ -1,4 +1,47 @@
+こんにちは！ragasでgemma-2b-itを使いたいのね♪
 
-aaaaaTTNKNNjffi
-fafjieafjewjifa
-fjeaifwejfijiodsjoifewafewaf
+ragasでgemma-2b-itを使うには、いくつか方法があるよ～！
+
+まず一番簡単なのは、Hugging Face Transformersライブラリを使う方法だね。こんな感じでできるよ：
+
+```python
+from ragas.llms import LangchainLLMWrapper
+from langchain_community.llms import HuggingFacePipeline
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+
+# Gemma-2b-itのモデルとトークナイザーを読み込み
+model_name = "google/gemma-2b-it"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# パイプライン作成
+pipe = pipeline(
+    "text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_new_tokens=256,
+    temperature=0.1,
+    do_sample=True
+)
+
+# LangChainのHuggingFacePipelineでラップ
+hf_llm = HuggingFacePipeline(pipeline=pipe)
+
+# ragasで使えるようにラップ
+ragas_llm = LangchainLLMWrapper(hf_llm)
+```
+
+もしくは、Ollamaを使ってる場合は、Ollamaでgemmaを動かしてからragasで使うこともできるよ！
+
+```python
+from ragas.llms import LangchainLLMWrapper
+from langchain_community.llms import Ollama
+
+# Ollamaでgemmaを使用
+ollama_llm = Ollama(model="gemma:2b")
+ragas_llm = LangchainLLMWrapper(ollama_llm)
+```
+
+あと、メモリが足りない場合は量子化とか使うといいかも！4bitとか8bit量子化すればメモリ使用量減らせるからね～
+
+どの方法が良さそう？環境とか使用目的教えてくれたら、もっと具体的にアドバイスできるよ！✨
