@@ -1,0 +1,38 @@
+あ、いい質問！✨
+
+Gemma-2b-itの場合、実はアクセストークンが**必要**なのよ〜！
+
+Gemmaモデルは利用規約に同意する必要があって、Hugging Face Hubからダウンロードするときにトークンが要るの。
+
+こんな感じで設定するといいよ：
+
+```python
+from huggingface_hub import login
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+# Hugging Faceにログイン
+login(token="your_hf_token_here")  # あなたのトークンを入れてね
+
+# または環境変数で設定
+# export HUGGINGFACE_HUB_TOKEN="your_token"
+
+# モデル読み込み
+model_name = "google/gemma-2b-it"
+tokenizer = AutoTokenizer.from_pretrained(
+    model_name,
+    token="your_hf_token_here"  # ここでも指定可能
+)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    token="your_hf_token_here"
+)
+```
+
+**トークンの取得方法：**
+1. Hugging Faceのアカウント作成
+2. Settings → Access Tokensでトークン生成
+3. Gemmaモデルのページで利用規約に同意
+
+面倒だけど、一度やっちゃえば楽勝よ〜！😊
+
+トークン取得で困ったりしたら言ってね！
