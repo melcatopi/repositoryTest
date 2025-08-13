@@ -1,0 +1,433 @@
+// ========================================
+// 1. User Control クラス (PersonInfoControl.cs)
+// ========================================
+using System;
+using System.Windows.Forms;
+
+public partial class PersonInfoControl : UserControl
+{
+    // プロパティでデータのやり取りをする
+    public string PersonName
+    {
+        get { return txtName.Text; }
+        set { txtName.Text = value; }
+    }
+
+    public int PersonAge
+    {
+        get 
+        { 
+            int age;
+            return int.TryParse(txtAge.Text, out age) ? age : 0;
+        }
+        set { txtAge.Text = value.ToString(); }
+    }
+
+    // カスタムイベントを定義
+    public event EventHandler PersonUpdated;
+    public event EventHandler BackRequested;  // 戻るボタン用
+
+    public PersonInfoControl()
+    {
+        InitializeComponent();
+        
+        // ボタンのクリックイベントを設定
+        btnUpdate.Click += BtnUpdate_Click;
+        btnBack.Click += BtnBack_Click;
+        
+        // 初期値設定
+        PersonName = "";
+        PersonAge = 0;
+    }
+
+    private void BtnUpdate_Click(object sender, EventArgs e)
+    {
+        // 入力チェック
+        if (string.IsNullOrWhiteSpace(PersonName))
+        {
+            MessageBox.Show("名前を入力してください！", "エラー", 
+                          MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (PersonAge < 0 || PersonAge > 150)
+        {
+            MessageBox.Show("正しい年齢を入力してください（0-150）", "エラー", 
+                          MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        // ラベルを更新
+        lblInfo.Text = $"更新済み: {PersonName} ({PersonAge}歳)";
+        
+        // カスタムイベントを発火
+        PersonUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void BtnBack_Click(object sender, EventArgs e)
+    {
+        // メインフォームに戻るイベントを発火
+        BackRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    // パブリックメソッドで外部からコントロール可能
+    public void ClearInfo()
+    {
+        PersonName = "";
+        PersonAge = 0;
+        lblInfo.Text = "未設定";
+    }
+
+    public bool IsValidInfo()
+    {
+        return !string.IsNullOrWhiteSpace(PersonName) && PersonAge > 0 && PersonAge <= 150;
+    }
+}
+
+// ========================================
+// 2. User Control デザイナー部分 (PersonInfoControl.Designer.cs)
+// ========================================
+partial class PersonInfoControl
+{
+    private System.ComponentModel.IContainer components = null;
+    private Label lblTitle;
+    private Label lblName;
+    private Label lblAge;
+    private TextBox txtName;
+    private TextBox txtAge;
+    private Button btnUpdate;
+    private Button btnBack;
+    private Label lblInfo;
+    private Panel panelMain;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && (components != null))
+        {
+            components.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+
+    private void InitializeComponent()
+    {
+        this.lblTitle = new Label();
+        this.lblName = new Label();
+        this.lblAge = new Label();
+        this.txtName = new TextBox();
+        this.txtAge = new TextBox();
+        this.btnUpdate = new Button();
+        this.btnBack = new Button();
+        this.lblInfo = new Label();
+        this.panelMain = new Panel();
+        this.panelMain.SuspendLayout();
+        this.SuspendLayout();
+        
+        // panelMain
+        this.panelMain.BackColor = System.Drawing.Color.LightBlue;
+        this.panelMain.BorderStyle = BorderStyle.FixedSingle;
+        this.panelMain.Controls.Add(this.lblTitle);
+        this.panelMain.Controls.Add(this.lblName);
+        this.panelMain.Controls.Add(this.txtName);
+        this.panelMain.Controls.Add(this.lblAge);
+        this.panelMain.Controls.Add(this.txtAge);
+        this.panelMain.Controls.Add(this.btnUpdate);
+        this.panelMain.Controls.Add(this.lblInfo);
+        this.panelMain.Controls.Add(this.btnBack);
+        this.panelMain.Location = new System.Drawing.Point(20, 20);
+        this.panelMain.Name = "panelMain";
+        this.panelMain.Size = new System.Drawing.Size(350, 250);
+        this.panelMain.TabIndex = 0;
+        
+        // lblTitle
+        this.lblTitle.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+        this.lblTitle.ForeColor = System.Drawing.Color.DarkBlue;
+        this.lblTitle.Location = new System.Drawing.Point(10, 10);
+        this.lblTitle.Name = "lblTitle";
+        this.lblTitle.Size = new System.Drawing.Size(330, 23);
+        this.lblTitle.TabIndex = 0;
+        this.lblTitle.Text = "📝 個人情報入力フォーム";
+        this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        
+        // lblName
+        this.lblName.AutoSize = true;
+        this.lblName.Font = new System.Drawing.Font("MS UI Gothic", 9F);
+        this.lblName.Location = new System.Drawing.Point(20, 50);
+        this.lblName.Name = "lblName";
+        this.lblName.Size = new System.Drawing.Size(41, 12);
+        this.lblName.TabIndex = 1;
+        this.lblName.Text = "お名前:";
+        
+        // txtName
+        this.txtName.Font = new System.Drawing.Font("MS UI Gothic", 10F);
+        this.txtName.Location = new System.Drawing.Point(80, 47);
+        this.txtName.Name = "txtName";
+        this.txtName.Size = new System.Drawing.Size(200, 21);
+        this.txtName.TabIndex = 2;
+        
+        // lblAge
+        this.lblAge.AutoSize = true;
+        this.lblAge.Font = new System.Drawing.Font("MS UI Gothic", 9F);
+        this.lblAge.Location = new System.Drawing.Point(20, 85);
+        this.lblAge.Name = "lblAge";
+        this.lblAge.Size = new System.Drawing.Size(29, 12);
+        this.lblAge.TabIndex = 3;
+        this.lblAge.Text = "年齢:";
+        
+        // txtAge
+        this.txtAge.Font = new System.Drawing.Font("MS UI Gothic", 10F);
+        this.txtAge.Location = new System.Drawing.Point(80, 82);
+        this.txtAge.Name = "txtAge";
+        this.txtAge.Size = new System.Drawing.Size(80, 21);
+        this.txtAge.TabIndex = 4;
+        
+        // btnUpdate
+        this.btnUpdate.BackColor = System.Drawing.Color.LightGreen;
+        this.btnUpdate.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
+        this.btnUpdate.Location = new System.Drawing.Point(200, 80);
+        this.btnUpdate.Name = "btnUpdate";
+        this.btnUpdate.Size = new System.Drawing.Size(80, 25);
+        this.btnUpdate.TabIndex = 5;
+        this.btnUpdate.Text = "✅ 更新";
+        this.btnUpdate.UseVisualStyleBackColor = false;
+        
+        // lblInfo
+        this.lblInfo.BackColor = System.Drawing.Color.White;
+        this.lblInfo.BorderStyle = BorderStyle.FixedSingle;
+        this.lblInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F);
+        this.lblInfo.ForeColor = System.Drawing.Color.DarkGreen;
+        this.lblInfo.Location = new System.Drawing.Point(20, 125);
+        this.lblInfo.Name = "lblInfo";
+        this.lblInfo.Size = new System.Drawing.Size(260, 50);
+        this.lblInfo.TabIndex = 6;
+        this.lblInfo.Text = "未設定";
+        this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        
+        // btnBack
+        this.btnBack.BackColor = System.Drawing.Color.LightCoral;
+        this.btnBack.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
+        this.btnBack.Location = new System.Drawing.Point(20, 200);
+        this.btnBack.Name = "btnBack";
+        this.btnBack.Size = new System.Drawing.Size(100, 30);
+        this.btnBack.TabIndex = 7;
+        this.btnBack.Text = "🔙 戻る";
+        this.btnBack.UseVisualStyleBackColor = false;
+        
+        // PersonInfoControl
+        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.BackColor = System.Drawing.SystemColors.Control;
+        this.Controls.Add(this.panelMain);
+        this.Name = "PersonInfoControl";
+        this.Size = new System.Drawing.Size(400, 300);
+        this.panelMain.ResumeLayout(false);
+        this.panelMain.PerformLayout();
+        this.ResumeLayout(false);
+    }
+}
+
+// ========================================
+// 3. メインフォーム (MainForm.cs)
+// ========================================
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+public partial class MainForm : Form
+{
+    private PersonInfoControl personInfoControl;
+    private Panel panelMenu;
+    private Label lblWelcome;
+    private Button btnShowPersonForm;
+    private Button btnShowAbout;
+    private Button btnExit;
+    private Label lblStatus;
+
+    public MainForm()
+    {
+        InitializeComponent();
+        
+        // 初期状態はメニューを表示
+        ShowMenuPanel();
+        
+        // イベント設定
+        btnShowPersonForm.Click += BtnShowPersonForm_Click;
+        btnShowAbout.Click += BtnShowAbout_Click;
+        btnExit.Click += BtnExit_Click;
+    }
+
+    private void ShowMenuPanel()
+    {
+        // User Controlを隠してメニューを表示
+        if (personInfoControl != null)
+        {
+            personInfoControl.Visible = false;
+        }
+        panelMenu.Visible = true;
+        lblStatus.Text = "メニュー画面";
+    }
+
+    private void ShowPersonInfoControl()
+    {
+        // メニューを隠してUser Controlを表示
+        panelMenu.Visible = false;
+        
+        if (personInfoControl == null)
+        {
+            personInfoControl = new PersonInfoControl();
+            personInfoControl.Location = new Point(50, 50);
+            personInfoControl.PersonUpdated += PersonControl_Updated;
+            personInfoControl.BackRequested += PersonControl_BackRequested;
+            this.Controls.Add(personInfoControl);
+        }
+        
+        personInfoControl.Visible = true;
+        lblStatus.Text = "個人情報入力画面";
+    }
+
+    private void BtnShowPersonForm_Click(object sender, EventArgs e)
+    {
+        ShowPersonInfoControl();
+    }
+
+    private void BtnShowAbout_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("User Control サンプルアプリケーション\n\n" +
+                       "このアプリは画面切り替えのデモです♪\n" +
+                       "ボタンを押すとUser Controlが表示されるよ〜",
+                       "アプリについて",
+                       MessageBoxButtons.OK,
+                       MessageBoxIcon.Information);
+    }
+
+    private void BtnExit_Click(object sender, EventArgs e)
+    {
+        if (MessageBox.Show("アプリを終了しますか？", "確認", 
+                           MessageBoxButtons.YesNo, 
+                           MessageBoxIcon.Question) == DialogResult.Yes)
+        {
+            this.Close();
+        }
+    }
+
+    private void PersonControl_Updated(object sender, EventArgs e)
+    {
+        PersonInfoControl control = sender as PersonInfoControl;
+        if (control != null && control.IsValidInfo())
+        {
+            lblStatus.Text = $"更新完了: {control.PersonName}さん ({control.PersonAge}歳)";
+        }
+    }
+
+    private void PersonControl_BackRequested(object sender, EventArgs e)
+    {
+        ShowMenuPanel();
+    }
+
+    private void InitializeComponent()
+    {
+        this.panelMenu = new Panel();
+        this.lblWelcome = new Label();
+        this.btnShowPersonForm = new Button();
+        this.btnShowAbout = new Button();
+        this.btnExit = new Button();
+        this.lblStatus = new Label();
+        this.panelMenu.SuspendLayout();
+        this.SuspendLayout();
+        
+        // panelMenu
+        this.panelMenu.BackColor = System.Drawing.Color.LightYellow;
+        this.panelMenu.BorderStyle = BorderStyle.FixedSingle;
+        this.panelMenu.Controls.Add(this.lblWelcome);
+        this.panelMenu.Controls.Add(this.btnShowPersonForm);
+        this.panelMenu.Controls.Add(this.btnShowAbout);
+        this.panelMenu.Controls.Add(this.btnExit);
+        this.panelMenu.Location = new System.Drawing.Point(50, 50);
+        this.panelMenu.Name = "panelMenu";
+        this.panelMenu.Size = new System.Drawing.Size(350, 300);
+        this.panelMenu.TabIndex = 0;
+        
+        // lblWelcome
+        this.lblWelcome.Font = new System.Drawing.Font("MS UI Gothic", 14F, System.Drawing.FontStyle.Bold);
+        this.lblWelcome.ForeColor = System.Drawing.Color.DarkBlue;
+        this.lblWelcome.Location = new System.Drawing.Point(20, 30);
+        this.lblWelcome.Name = "lblWelcome";
+        this.lblWelcome.Size = new System.Drawing.Size(310, 50);
+        this.lblWelcome.TabIndex = 0;
+        this.lblWelcome.Text = "🎉 User Control デモ\nメニューへようこそ！";
+        this.lblWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        
+        // btnShowPersonForm
+        this.btnShowPersonForm.BackColor = System.Drawing.Color.LightBlue;
+        this.btnShowPersonForm.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Bold);
+        this.btnShowPersonForm.Location = new System.Drawing.Point(75, 110);
+        this.btnShowPersonForm.Name = "btnShowPersonForm";
+        this.btnShowPersonForm.Size = new System.Drawing.Size(200, 40);
+        this.btnShowPersonForm.TabIndex = 1;
+        this.btnShowPersonForm.Text = "📝 個人情報入力フォーム";
+        this.btnShowPersonForm.UseVisualStyleBackColor = false;
+        
+        // btnShowAbout
+        this.btnShowAbout.BackColor = System.Drawing.Color.LightGreen;
+        this.btnShowAbout.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Bold);
+        this.btnShowAbout.Location = new System.Drawing.Point(75, 170);
+        this.btnShowAbout.Name = "btnShowAbout";
+        this.btnShowAbout.Size = new System.Drawing.Size(200, 40);
+        this.btnShowAbout.TabIndex = 2;
+        this.btnShowAbout.Text = "ℹ️ アプリについて";
+        this.btnShowAbout.UseVisualStyleBackColor = false;
+        
+        // btnExit
+        this.btnExit.BackColor = System.Drawing.Color.LightCoral;
+        this.btnExit.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Bold);
+        this.btnExit.Location = new System.Drawing.Point(75, 230);
+        this.btnExit.Name = "btnExit";
+        this.btnExit.Size = new System.Drawing.Size(200, 40);
+        this.btnExit.TabIndex = 3;
+        this.btnExit.Text = "❌ 終了";
+        this.btnExit.UseVisualStyleBackColor = false;
+        
+        // lblStatus
+        this.lblStatus.BackColor = System.Drawing.Color.White;
+        this.lblStatus.BorderStyle = BorderStyle.FixedSingle;
+        this.lblStatus.Font = new System.Drawing.Font("MS UI Gothic", 9F);
+        this.lblStatus.Location = new System.Drawing.Point(12, 400);
+        this.lblStatus.Name = "lblStatus";
+        this.lblStatus.Size = new System.Drawing.Size(460, 23);
+        this.lblStatus.TabIndex = 1;
+        this.lblStatus.Text = "メニュー画面";
+        this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        
+        // MainForm
+        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.BackColor = System.Drawing.SystemColors.Control;
+        this.ClientSize = new System.Drawing.Size(484, 435);
+        this.Controls.Add(this.lblStatus);
+        this.Controls.Add(this.panelMenu);
+        this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        this.MaximizeBox = false;
+        this.Name = "MainForm";
+        this.StartPosition = FormStartPosition.CenterScreen;
+        this.Text = "User Control 画面切り替えサンプル";
+        this.panelMenu.ResumeLayout(false);
+        this.ResumeLayout(false);
+    }
+}
+
+// ========================================
+// 4. Program.cs (アプリケーションエントリーポイント)
+// ========================================
+using System;
+using System.Windows.Forms;
+
+static class Program
+{
+    [STAThread]
+    static void Main()
+    {
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+        Application.Run(new MainForm());
+    }
+}
