@@ -1,0 +1,99 @@
+deepevalのnon-LLMモードについて教えるね！
+
+deepevalは通常LLMを使って評価メトリクスを計算するんだけど、non-LLMモードっていうのがあって、これはLLMを使わずに従来的な手法で評価できるモードなのよ。
+
+## 主な特徴
+
+**速度が超早い！** LLMへのAPI呼び出しがないから、評価がめちゃくちゃ高速になる。コスト削減にもなるしね～
+
+**オフライン環境でも使える** インターネット接続やAPI keyが不要だから、セキュアな環境でも問題なし！
+
+## 利用できるメトリクス
+
+non-LLMモードで使える主なメトリクスはこんな感じ：
+
+- **BLEU Score** - 機械翻訳でよく使われる、n-gramベースの評価
+- **ROUGE Score** - 文書要約の評価によく使われる
+- **Exact Match** - 完全一致での評価
+- **Semantic Similarity** - 埋め込みベースの意味的類似度
+- **METEOR** - 機械翻訳評価の改良版
+
+## 使い方
+
+```python
+from deepeval import evaluate
+from deepeval.metrics import ExactMatchMetric, SemanticSimilarityMetric
+from deepeval.test_case import LLMTestCase
+
+# non-LLMメトリクスの設定
+exact_match = ExactMatchMetric()
+semantic_sim = SemanticSimilarityMetric()
+
+test_case = LLMTestCase(
+    input="質問内容",
+    actual_output="実際の出力", 
+    expected_output="期待される出力"
+)
+
+# 評価実行
+evaluate([test_case], [exact_match, semantic_sim])
+```
+
+**メリット：**
+- 超高速！
+- コストゼロ
+- プライバシー保護
+
+**デメリット：**
+- LLMベースの複雑な評価ほど柔軟性がない
+- 文脈理解とかニュアンスの評価は限定的
+
+大量のデータを素早く評価したい時とか、基本的な品質チェックには最適だよ～！何か他に知りたいことある？
+
+★ragの検証
+うん、RAGの検証にも全然使えるよ！でも正直言うと、non-LLMモードだけだとちょっと限界があるかな～
+
+## non-LLMモードでできるRAG検証
+
+**基本的な一致チェック**
+```python
+from deepeval.metrics import ExactMatchMetric, SemanticSimilarityMetric
+
+# 取得した文書が期待通りかチェック
+exact_match = ExactMatchMetric()
+semantic_sim = SemanticSimilarityMetric(threshold=0.8)
+
+test_case = LLMTestCase(
+    input="RAGクエリ",
+    actual_output="生成された回答",
+    expected_output="期待される回答"
+)
+```
+
+**意味的類似度での評価**
+- 埋め込みベースで回答の意味的な近さを測定
+- 完全一致じゃなくても、意味が合ってれば高スコア
+
+## でも正直、限界もある...
+
+RAGって複雑でしょ？文書検索の精度とか、生成された回答の事実性とか、文脈の理解度とか。そういうのをnon-LLMモードだけで評価するのはちょっとキツいのよね💦
+
+## おすすめのアプローチ
+
+**ハイブリッド使い分け！**
+```python
+# 基本チェックはnon-LLMで高速に
+basic_metrics = [ExactMatchMetric(), SemanticSimilarityMetric()]
+
+# 複雑な評価はLLMモードで
+from deepeval.metrics import FaithfulnessMetric, AnswerRelevancyMetric
+advanced_metrics = [FaithfulnessMetric(), AnswerRelevancyMetric()]
+
+# 段階的に評価
+evaluate(test_cases, basic_metrics)  # 高速な1次スクリーニング
+evaluate(filtered_cases, advanced_metrics)  # 詳細評価
+```
+
+こうすると効率的だし、コストも抑えられるよ！non-LLMで大まかにふるいにかけて、重要な部分だけLLMで詳しく見るって感じ。
+
+RAGの何を重点的に検証したいか教えてくれれば、もっと具体的にアドバイスできるよ～！
