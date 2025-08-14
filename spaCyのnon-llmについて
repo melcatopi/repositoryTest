@@ -1,0 +1,119 @@
+spaCyのnon-LLMモードについて説明するね！
+
+spaCyは元々、大規模言語モデルが普及する前から存在してる自然言語処理ライブラリで、実は基本的に「non-LLM」なアプローチが中心なんだよ。
+
+## 主な特徴
+
+**従来の機械学習アプローチ**
+- CNNやLSTMなどの従来のニューラルネットワーク
+- 統計的手法とルールベースの組み合わせ
+- 軽量で高速な処理が可能
+
+**パイプライン処理**
+```python
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+doc = nlp("This is a sample text.")
+
+# トークン化、品詞タグ付け、固有表現抽出など
+for token in doc:
+    print(token.text, token.pos_, token.lemma_)
+```
+
+## non-LLMの利点
+
+**速度とリソース効率**
+- LLMと比べて圧倒的に軽い
+- CPUでも十分高速
+- メモリ使用量も少ない
+
+**予測可能性**
+- 決定論的な結果
+- デバッグしやすい
+- プロダクション環境で安定
+
+**カスタマイズ性**
+- 独自のルールやパターンを追加しやすい
+- ドメイン特化型の調整が可能
+
+ただし、最近はspaCyもLLMとの統合機能（spacy-llm）を提供してるから、用途に応じて使い分けるのがベストだと思う！特定のタスクなら従来のspaCyの方が効率的だったりするしね〜
+
+何か具体的に知りたいことある？
+
+★ragの検証
+もちろん使えるよ！RAGの検証でspaCyのnon-LLMモードはめっちゃ有用だと思う！
+
+## RAG検証での活用方法
+
+**文書前処理の品質チェック**
+```python
+import spacy
+
+nlp = spacy.load("ja_core_news_sm")
+
+def analyze_document_quality(text):
+    doc = nlp(text)
+    
+    # 文の数、トークン数
+    sentences = len(list(doc.sents))
+    tokens = len(doc)
+    
+    # 固有表現の抽出
+    entities = [(ent.text, ent.label_) for ent in doc.ents]
+    
+    return {
+        "sentences": sentences,
+        "tokens": tokens,
+        "entities": entities
+    }
+```
+
+**クエリと取得文書の類似性検証**
+```python
+def semantic_overlap(query, retrieved_doc):
+    query_doc = nlp(query)
+    doc_doc = nlp(retrieved_doc)
+    
+    # 重要な名詞の重複チェック
+    query_nouns = {token.lemma_ for token in query_doc if token.pos_ == "NOUN"}
+    doc_nouns = {token.lemma_ for token in doc_doc if token.pos_ == "NOUN"}
+    
+    overlap = query_nouns.intersection(doc_nouns)
+    return len(overlap) / len(query_nouns) if query_nouns else 0
+```
+
+**回答品質の評価**
+```python
+def answer_quality_check(answer):
+    doc = nlp(answer)
+    
+    # 文法的な完成度
+    complete_sentences = sum(1 for sent in doc.sents if sent[-1].text in '.!?')
+    
+    # 固有表現の豊富さ
+    entity_types = set(ent.label_ for ent in doc.ents)
+    
+    return {
+        "completeness": complete_sentences / len(list(doc.sents)),
+        "entity_diversity": len(entity_types)
+    }
+```
+
+## 検証での強み
+
+**高速バッチ処理**
+- 大量の文書を一気に分析できる
+- リアルタイム評価も可能
+
+**コスト効率**
+- LLM APIを使わずに済む
+- 継続的な検証に最適
+
+**客観的指標**
+- 数値ベースの評価が可能
+- A/Bテストしやすい
+
+特にRAGシステムの継続的な品質監視には最高だと思う！LLMでの評価と組み合わせることで、コストを抑えながら包括的な検証ができるよ〜
+
+どんな検証指標を重視したい？もっと具体的なコード例も書けるから教えて！
