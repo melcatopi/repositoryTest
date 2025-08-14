@@ -1,0 +1,98 @@
+Hugging Face Evaluateライブラリのnon-LLMモードについて説明するね！
+
+Evaluateライブラリは元々大規模言語モデル（LLM）の評価を想定して作られてるんだけど、実は従来の機械学習モデルや他のタスクの評価にも使えるのよ。これがnon-LLMモードってやつ！
+
+**主な特徴：**
+
+従来のML分類・回帰タスクの評価メトリクス（accuracy、F1-score、RMSE、MAEとか）が豊富に用意されてて、scikit-learnみたいな従来のMLライブラリで訓練したモデルでも簡単に評価できちゃう。
+
+**使用例：**
+```python
+import evaluate
+
+# 分類タスクの場合
+accuracy_metric = evaluate.load("accuracy")
+f1_metric = evaluate.load("f1")
+
+# 予測結果と正解ラベルから評価
+predictions = [0, 1, 2, 0, 1]
+references = [0, 1, 1, 0, 1]
+
+accuracy_score = accuracy_metric.compute(predictions=predictions, references=references)
+f1_score = f1_metric.compute(predictions=predictions, references=references, average="macro")
+```
+
+**メリット：**
+- 統一されたAPIで様々なメトリクスを扱える
+- バッチ処理や分散処理にも対応
+- 結果の可視化機能も充実してる
+- Hugging Face Hubと連携してメトリクスを共有できる
+
+画像分類とか音声認識とか、LLM以外のタスクでもバリバリ使えるから、機械学習プロジェクト全般で活用できるのがいいところだよね〜！
+
+★ragの検証
+もちろん使えるよー！RAGの検証でEvaluateライブラリはめっちゃ有用なの💪
+
+**RAG検証で使える主要メトリクス：**
+
+**検索精度の評価：**
+```python
+import evaluate
+
+# 検索された文書の関連性評価
+precision_metric = evaluate.load("precision")
+recall_metric = evaluate.load("recall")
+f1_metric = evaluate.load("f1")
+
+# 検索結果が正解文書を含んでいるかチェック
+retrieved_docs = [1, 0, 1, 1, 0]  # 1=関連文書, 0=非関連文書
+ground_truth = [1, 1, 1, 0, 0]
+
+precision = precision_metric.compute(predictions=retrieved_docs, references=ground_truth)
+```
+
+**生成品質の評価：**
+```python
+# BLEU, ROUGE, BERTScoreとかでRAGの回答品質を測定
+bleu_metric = evaluate.load("bleu")
+rouge_metric = evaluate.load("rouge")
+bertscore_metric = evaluate.load("bertscore")
+
+predictions = ["RAGシステムが生成した回答"]
+references = [["正解となる参照回答"]]
+
+bleu_score = bleu_metric.compute(predictions=predictions, references=references)
+rouge_score = rouge_metric.compute(predictions=predictions, references=references)
+```
+
+**カスタム評価も作れる：**
+```python
+# RAG特有の評価（例：事実正確性、引用精度など）
+def rag_faithfulness(predictions, references, retrieved_contexts):
+    # 生成された回答が検索文書に基づいているかチェック
+    scores = []
+    for pred, ref, context in zip(predictions, references, retrieved_contexts):
+        # カスタムロジックでfaithfulness計算
+        score = calculate_faithfulness(pred, context)
+        scores.append(score)
+    return {"faithfulness": sum(scores) / len(scores)}
+```
+
+**実際のRAG評価パイプライン例：**
+```python
+def evaluate_rag_system(questions, generated_answers, reference_answers, retrieved_docs):
+    results = {}
+    
+    # 回答品質
+    rouge = evaluate.load("rouge")
+    results.update(rouge.compute(predictions=generated_answers, references=reference_answers))
+    
+    # 検索精度
+    # 検索文書の関連性スコア計算
+    relevance_scores = calculate_retrieval_relevance(questions, retrieved_docs)
+    results["retrieval_precision"] = sum(relevance_scores) / len(relevance_scores)
+    
+    return results
+```
+
+RAGは検索＋生成の2段階だから、両方の評価が重要なのよね〜！Evaluateライブラリなら統一的に扱えて便利だよ✨
