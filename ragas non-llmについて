@@ -1,0 +1,116 @@
+ragasのnon-llmモードについて説明するね！
+
+ragasっていうのは、RAG（Retrieval-Augmented Generation）システムの評価フレームワークなんだけど、通常はLLMを使って評価メトリクスを計算するの。でもnon-llmモードっていうのは、LLMを使わずに評価を行うモードのことなんだ。
+
+## なんでnon-llmモードが必要なの？
+
+- **コスト削減**: LLM APIの呼び出し料金を節約できちゃう
+- **速度向上**: APIコールがないから評価が超早い
+- **プライバシー**: データが外部のLLMサービスに送られない
+- **オフライン環境**: インターネット接続なしでも評価できる
+
+## non-llmモードで使える評価メトリクス
+
+主にこんな感じのメトリクスが使えるよ：
+
+1. **Context Precision (non-LLM)**
+   - 検索された文書の関連性を統計的手法で評価
+
+2. **Context Recall (non-LLM)**  
+   - 必要な情報がちゃんと取得できてるかをチェック
+
+3. **BLEU Score**
+   - 生成されたテキストと参照テキストの類似度
+
+4. **ROUGE Score**
+   - 要約の品質評価によく使われる
+
+## 使い方の例
+
+```python
+from ragas import evaluate
+from ragas.metrics import (
+    context_precision_non_llm,
+    context_recall_non_llm,
+    bleu_score,
+    rouge_score
+)
+
+# non-llmメトリクスを指定
+metrics = [
+    context_precision_non_llm,
+    context_recall_non_llm,
+    bleu_score,
+    rouge_score
+]
+
+# 評価実行
+result = evaluate(
+    dataset=your_dataset,
+    metrics=metrics
+)
+```
+
+ただし、LLMベースの評価と比べると精度は落ちる可能性があるから、用途に応じて使い分けるのがベストだよ！プロトタイピングや大量データの一次評価には超便利だと思う✨
+
+
+★ragの検証
+もちろん使えるよ！っていうか、むしろRAGシステムの検証にはragasのnon-llmモードってめっちゃ便利なんだ♪
+
+## RAG検証でのnon-llmモードの使い道
+
+### 1. **開発段階での迅速な検証**
+```python
+# 開発中のRAGシステムをサクッと評価
+from ragas.metrics import context_precision_non_llm, context_recall_non_llm
+
+# コストかけずに何度でもテストできちゃう
+result = evaluate(dataset, metrics=[context_precision_non_llm])
+```
+
+### 2. **大量データでの一次スクリーニング**
+- 何千件ものクエリを低コストで評価
+- 明らかにダメなパターンを先に除外
+- その後、重要なケースだけLLMで詳細評価
+
+### 3. **継続的な監視・モニタリング**
+```python
+# 本番環境での定期チェック
+def daily_rag_health_check():
+    # APIコスト気にせず毎日実行
+    metrics = [
+        context_recall_non_llm,
+        bleu_score
+    ]
+    return evaluate(today_queries, metrics=metrics)
+```
+
+### 4. **A/Bテストでの比較**
+- 複数のRAG設定を並行して評価
+- 検索アルゴリズムの改善効果を定量化
+- チャンク分割方法の比較とか
+
+## 実際の検証フロー例
+
+```python
+# Step1: non-llmで大まかな性能チェック
+quick_metrics = [context_precision_non_llm, rouge_score]
+quick_result = evaluate(test_dataset, metrics=quick_metrics)
+
+# Step2: 問題がありそうなケースを特定
+problematic_cases = filter_low_scores(quick_result)
+
+# Step3: 問題ケースだけLLMで詳細分析
+detailed_metrics = [context_precision, faithfulness]  # LLM使用
+detailed_result = evaluate(problematic_cases, metrics=detailed_metrics)
+```
+
+## 注意点もあるよ！
+
+- **精度の限界**: LLMベースより評価精度は劣る
+- **複雑な推論**: 論理的整合性とかは評価しにくい
+- **言語依存**: 日本語だと英語より精度落ちることも
+
+でも、RAGの基本性能（検索精度、関連性）を素早くチェックするには十分使えるし、開発サイクルを回すのにはマジで重宝するよ〜！
+
+コスト気にせずガンガン検証できるから、RAG改善のPDCAが回しやすくなるのが一番のメリットかな💪
