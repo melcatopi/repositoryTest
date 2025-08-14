@@ -1,0 +1,89 @@
+おつかれー！sentence-transformersのnon-llmモードについて説明するね♪
+
+sentence-transformersって普通はBERTとかRoBERTaみたいな事前訓練済みのトランスフォーマーモデルを使うんだけど、non-llmモードっていうのは、より軽量で高速な埋め込みモデルを使うオプションなのよ！
+
+具体的には：
+
+**従来のモード（LLMベース）**
+- BERT、RoBERTa、DistilBERTとかの大きなモデル
+- 高精度だけど計算コストが重い
+- メモリもたくさん使う
+
+**non-llmモード**
+- TF-IDFベースのモデル
+- BOW（Bag of Words）ベース
+- LSI（Latent Semantic Indexing）
+- より軽量でスピードが早い
+
+使い方はこんな感じ：
+
+```python
+from sentence_transformers import SentenceTransformer
+
+# non-llmモードでの軽量モデル
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+
+# TF-IDFベースの軽量化
+from sentence_transformers.models import TfidfModel
+model = SentenceTransformer(modules=[TfidfModel()])
+```
+
+メリットは：
+- 超高速処理
+- 低メモリ使用量
+- CPUでも軽快に動く
+- リアルタイム処理に向いてる
+
+デメリットは：
+- 精度がちょっと落ちる場合がある
+- 文脈理解が浅め
+
+リソース制約があるときとか、速度重視のアプリケーションには めっちゃ便利よ～！どんなユースケースで使いたいの？
+
+★ragの検証
+あ、RAGの検証に使えるかって話ね！これは結構いい質問だわ～♪
+
+**結論から言うと、使えるけど用途を選ぶって感じかな！**
+
+**使える場面：**
+- プロトタイプ段階での速度検証
+- 大量データでの初期フィルタリング
+- レスポンス速度の比較テスト
+- コスト効率の検証
+- ベースライン性能の測定
+
+**注意が必要な場面：**
+- 最終的な精度評価には向かない
+- 複雑なクエリの意味理解が弱い
+- ドメイン特化的な検索精度は落ちがち
+
+実際のRAG検証での使い方はこんな感じ：
+
+```python
+# 速度重視の検証用
+lightweight_retriever = SentenceTransformer('all-MiniLM-L6-v2')
+
+# 精度重視の本格検証用
+high_accuracy_retriever = SentenceTransformer('all-mpnet-base-v2')
+
+# 両方でベンチマーク取って比較
+def benchmark_rag(queries, docs):
+    # 軽量版での速度テスト
+    start = time.time()
+    light_results = lightweight_search(queries, docs)
+    light_time = time.time() - start
+    
+    # 高精度版での精度テスト
+    start = time.time()
+    accurate_results = accurate_search(queries, docs)
+    accurate_time = time.time() - start
+```
+
+**おすすめの使い方：**
+1. まずnon-llmモードで全体の流れを確認
+2. 速度要件をクリアできるか検証
+3. 精度が必要な部分だけ高性能モデルに切り替え
+
+RAGシステム全体のパフォーマンス測定には超便利だよ！特に本番運用での速度要件を満たせるかの検証には最適♪
+
+どんなデータセットで検証する予定なの？
