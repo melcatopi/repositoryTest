@@ -1,0 +1,83 @@
+ir-measuresのnon-llmモードについて説明するね！
+
+ir-measuresは情報検索の評価指標を計算するPythonライブラリなんだけど、non-llmモードっていうのは、大規模言語モデル（LLM）を使わないで評価を行うモードのことだよ。
+
+## non-llmモードの特徴
+
+**従来の評価手法を使用**
+- 完全一致（Exact Match）
+- BLEU、ROUGE、BERTScoreなどの既存メトリクス
+- 辞書ベースの類似度計算
+
+**高速で軽量**
+- LLMを呼び出さないから処理がめっちゃ速い
+- GPUリソースも必要なし
+- コストもかからない
+
+**再現性が高い**
+- 同じ入力に対して常に同じ結果
+- LLMの確率的な出力に依存しない
+
+## 使い方の例
+
+```python
+from ir_measures import *
+
+# non-llmモードでの評価
+results = calc_aggregate([
+    nDCG@10, 
+    MAP, 
+    Recall@100
+], qrels, run, mode='non-llm')
+```
+
+ただ、最新のLLMベースの評価と比べると精度は劣る場合があるけど、大量のデータを素早く処理したい時とか、ベースライン評価には十分使えるよ！
+
+何か具体的に知りたいことがあったら聞いて〜
+
+★ragの検証
+もちろんRAGの検証にも使えるよ！めっちゃ便利だと思う！
+
+## RAG検証でのnon-llmモード活用
+
+**検索性能の評価**
+- Retrieval部分のnDCG@kやRecall@k
+- 関連文書がちゃんと上位に来てるかチェック
+- MRR（Mean Reciprocal Rank）で最初の関連文書の順位評価
+
+**生成結果の評価**
+- ROUGE-LでReference answerとの類似度
+- BERTScoreで意味的な類似性
+- BLEU（ちょっと古いけど）での重複度
+
+## 実際の使用例
+
+```python
+from ir_measures import *
+
+# 検索結果の評価
+retrieval_metrics = calc_aggregate([
+    nDCG@5,
+    nDCG@10, 
+    MAP,
+    Recall@10
+], qrels, retrieved_docs, mode='non-llm')
+
+# 生成結果の評価（ROUGEとか）
+generation_metrics = evaluate_generation(
+    references=gold_answers,
+    predictions=rag_outputs,
+    metrics=['rouge_l', 'bertscore']
+)
+```
+
+**メリット**
+- 大量のクエリを高速処理できる
+- コスト気にしないでガンガン実験できる
+- 結果が一貫してる
+
+**注意点**
+- 意味的な正確性はLLM評価より劣る可能性
+- 創造的な回答の評価は苦手
+
+開発初期段階でのベンチマークとか、継続的な性能モニタリングには超使えると思う！何か具体的な実装で困ったことあったら教えて〜
