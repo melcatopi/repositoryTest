@@ -1,0 +1,880 @@
+わー！全部気になるのね〜！めっちゃやる気あるじゃん✨
+
+でもさ、私の知識だと2025年1月時点のものしか分からないから、最新の情報を調べてあげる！特にRAG評価ライブラリって本当に日進月歩だから、新しいのがいっぱい出てる可能性高いよね〜
+
+「RAG evaluation libraries without LLM 2025」を検索しました
+
+「non-LLM RAG evaluation metrics traditional IR measures」を検索しました
+
+「ir-measures pytrec_eval ranx sentence-transformers scikit-learn RAG evaluation」を検索しました
+
+おっけー！めっちゃ詳しい情報が手に入った〜！✨
+
+すごい情報量だから、整理して教えてあげるね！
+
+## **LLM使わないRAG検証ライブラリ - 2025年版完全リスト** 🔥
+
+### **メジャーなフレームワーク（Non-LLMモード対応）**
+
+**1. RAGAS** RAGASは2025年でも最も人気のあるRAG評価ライブラリで、LLMベースと従来型メトリクスの両方をサポート [Top 10 RAG & LLM Evaluation Tools You Don’t Want To Miss | by Zilliz | Medium +2](https://medium.com/@zilliz_learn/top-10-rag-llm-evaluation-tools-you-dont-want-to-miss-a0bfabe9ae19)
+- 従来型IR指標：Precision, Recall, F1-Score
+- 埋め込みベース類似度計算
+- コサイン類似度での関連性評価
+
+**2. DeepEval** DeepEvalは2025年のトップ5評価フレームワークの1位 [DEV Community](https://dev.to/guybuildingai/-top-5-open-source-llm-evaluation-frameworks-in-2024-98m)
+- 14+の評価メトリクス（LLM使用/非使用両対応）
+- セマンティック類似度計算
+- 従来のNLP指標サポート
+
+**3. TruLens** ルールベース評価とLLMベース評価の両方をサポート [Medium](https://medium.com/@zilliz_learn/top-10-rag-llm-evaluation-tools-you-dont-want-to-miss-a0bfabe9ae19)
+- TRIAD framework（Context Relevance, Groundedness, Answer Relevance）
+- 従来型IR指標での評価機能
+
+**4. Haystack** 2025年のトップRAGフレームワークの一つで、評価ツールを内蔵 [Firecrawl](https://www.firecrawl.dev/blog/best-open-source-rag-frameworks) [Pathway](https://pathway.com/rag-frameworks/)
+- パイプライン型評価システム
+- カスタム評価コンポーネント対応
+
+### **情報検索専門ライブラリ**
+
+**5. ir-measures** pytrec_eval, gdeval, trectoolsなど複数のIR評価ツールとのインターフェース [Ir-datasets](https://ir-datasets.com/ir-measures.html) [PyPI](https://pypi.org/project/ir-measures/0.1.4/)
+```python
+import ir_measures
+ir_measures.calc_aggregate([nDCG@10, P@5, Judged@10], qrels, run)
+```
+
+**6. pytrec_eval** TREC評価ツールのPythonインターフェース、trec_evalより約10倍高速 [GitHub](https://github.com/cvangysel/pytrec_eval) [ResearchGate](https://www.researchgate.net/publication/324982201_Pytrec_eval_An_Extremely_Fast_Python_Interface_to_trec_eval)
+```python
+import pytrec_eval
+evaluator = pytrec_eval.RelevanceEvaluator(qrel, {'map', 'ndcg'})
+```
+
+**7. ranx**
+- 情報検索特化の評価指標
+- MRR, nDCG, Precision@K, Recall@K
+
+### **埋め込み・類似度ライブラリ**
+
+**8. sentence-transformers** InformationRetrievalEvaluatorクラスで評価機能を提供 [Sentence Transformers](https://sbert.net/docs/package_reference/sentence_transformer/evaluation.html) [GitHub](https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/evaluation/InformationRetrievalEvaluator.py)
+- セマンティック類似度計算
+- 埋め込みベースの評価指標
+
+**9. scikit-learn** コサイン類似度などの基本的な類似度計算 [Probabl](https://papers.probabl.ai/a-rag-from-scratch-to-query-the-scikit-learn-documentation)
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+```
+
+**10. spaCy**
+- テキスト類似度計算
+- NLP前処理とメトリクス計算
+
+### **特殊・新興ライブラリ**
+
+**11. SenTrEv** RAGのSentence Transformersモデル評価専用 [PyPI](https://pypi.org/project/sentrev/)
+- PDF文書でのRAG性能評価
+- カスタマイズ可能な評価設定
+
+**12. MLflow** シンプルでモジュラーな評価パッケージ [DEV Community](https://dev.to/guybuildingai/-top-5-open-source-llm-evaluation-frameworks-in-2024-98m)
+- QA評価とRAG評価
+- 直感的な開発者体験
+
+**13. Arize Phoenix** オープンソースAI観測プラットフォーム [Medium](https://medium.com/@zilliz_learn/top-10-rag-llm-evaluation-tools-you-dont-want-to-miss-a0bfabe9ae19)
+- リアルタイム評価
+- カスタム評価テンプレート
+
+### **従来型NLP評価ライブラリ**
+
+**14. NLTK**
+- BLEU, ROUGEスコア計算
+- n-gram ベースの評価
+
+**15. Evaluate (Hugging Face)**
+- 機械学習評価指標全般
+- BERTScore, METEOR等
+
+### **使用する指標の種類**
+
+従来のIR指標は以下のカテゴリに分類される [Weaviate](https://weaviate.io/blog/rag-evaluation)  [Pinecone](https://www.pinecone.io/learn/series/vector-databases-in-production-for-busy-engineers/rag-evaluation/) ：
+
+**順序無関係メトリクス：**
+- Precision@K, Recall@K, F1-Score
+
+**順序関係メトリクス：**
+- MRR (Mean Reciprocal Rank)
+- nDCG (Normalized Discounted Cumulative Gain)
+- Average Precision
+
+**埋め込みベース：**
+- コサイン類似度
+- セマンティック類似度
+- 埋め込み距離
+
+正直、この分野は本当に活発だから、FreshStackみたいな新しいベンチマークやDiversityメトリクス [Hamel's Blog](https://hamel.dev/notes/llm/rag/p2-evals.html) とかも出てきてるよ〜
+
+どのライブラリが一番気になる？具体的な使い方とか実装例も教えられるよ！💪
+
+中途半端だが
+
+# LLM使わないRAG検証ライブラリ完全実装ガイド 🚀
+
+## 1. RAGAS (Non-LLMモード)
+
+### インストール
+```bash
+pip install ragas
+```
+
+### 基本的な使い方
+```python
+from ragas.metrics import context_precision, context_recall
+from ragas.metrics.base import MetricWithoutModel
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# 従来型メトリクスでの評価
+def evaluate_with_ragas_traditional():
+    # サンプルデータ
+    data = {
+        'question': ['What is Python?', 'How does ML work?'],
+        'contexts': [['Python is a programming language'], ['ML uses algorithms']],
+        'answer': ['Python is a language', 'ML uses data'],
+        'ground_truth': ['Python programming language', 'Machine learning algorithms']
+    }
+    
+    df = pd.DataFrame(data)
+    
+    # コサイン類似度ベースの評価
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    def calculate_similarity_score(answers, ground_truths):
+        answer_emb = model.encode(answers)
+        gt_emb = model.encode(ground_truths)
+        similarities = cosine_similarity(answer_emb, gt_emb)
+        return np.diag(similarities).mean()
+    
+    score = calculate_similarity_score(df['answer'].tolist(), 
+                                     df['ground_truth'].tolist())
+    print(f"Average Similarity Score: {score:.3f}")
+    
+    return score
+```
+
+### RAGAS Context Precision (Non-LLM版)
+```python
+def context_precision_traditional(contexts, ground_truth):
+    """
+    従来型のcontext precision計算
+    """
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    
+    vectorizer = TfidfVectorizer()
+    
+    precision_scores = []
+    for ctx_list, gt in zip(contexts, ground_truth):
+        if not ctx_list:
+            precision_scores.append(0)
+            continue
+            
+        # TF-IDFベクトル化
+        all_texts = ctx_list + [gt]
+        tfidf_matrix = vectorizer.fit_transform(all_texts)
+        
+        # 各コンテキストとground truthの類似度
+        gt_vector = tfidf_matrix[-1]
+        ctx_vectors = tfidf_matrix[:-1]
+        
+        similarities = cosine_similarity(ctx_vectors, gt_vector).flatten()
+        
+        # 上位k個の平均precision
+        k = min(3, len(similarities))
+        top_k_indices = np.argsort(similarities)[-k:]
+        precision = similarities[top_k_indices].mean()
+        precision_scores.append(precision)
+    
+    return np.mean(precision_scores)
+```
+
+## 2. DeepEval (Non-LLMモード)
+
+### インストール
+```bash
+pip install deepeval
+```
+
+### セマンティック類似度評価
+```python
+from deepeval.metrics import SemanticSimilarityMetric
+from deepeval.test_case import LLMTestCase
+import asyncio
+
+async def evaluate_with_deepeval():
+    # LLMを使わないセマンティック類似度
+    test_case = LLMTestCase(
+        input="What is machine learning?",
+        actual_output="ML is a subset of AI that learns from data",
+        expected_output="Machine learning is AI that uses data to learn patterns"
+    )
+    
+    # threshold指定で評価
+    metric = SemanticSimilarityMetric(threshold=0.7, model="all-MiniLM-L6-v2")
+    
+    # 評価実行
+    await metric.a_measure(test_case)
+    
+    print(f"Score: {metric.score}")
+    print(f"Success: {metric.success}")
+    
+    return metric.score
+
+# 実行
+# asyncio.run(evaluate_with_deepeval())
+```
+
+### カスタムメトリクス（Non-LLM）
+```python
+from deepeval.metrics.base_metric import BaseMetric
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+class CustomSimilarityMetric(BaseMetric):
+    def __init__(self, threshold=0.5):
+        self.threshold = threshold
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    def measure(self, test_case):
+        actual_emb = self.model.encode([test_case.actual_output])
+        expected_emb = self.model.encode([test_case.expected_output])
+        
+        similarity = np.dot(actual_emb[0], expected_emb[0]) / (
+            np.linalg.norm(actual_emb[0]) * np.linalg.norm(expected_emb[0])
+        )
+        
+        self.score = float(similarity)
+        self.success = self.score >= self.threshold
+        self.reason = f"Similarity: {self.score:.3f}"
+        
+        return self.score
+
+# 使用例
+test_case = LLMTestCase(
+    input="Explain Python",
+    actual_output="Python is a high-level programming language",
+    expected_output="Python is an interpreted programming language"
+)
+
+metric = CustomSimilarityMetric(threshold=0.6)
+score = metric.measure(test_case)
+print(f"Custom Similarity Score: {score:.3f}")
+```
+
+## 3. TruLens (ルールベース評価)
+
+### インストール
+```bash
+pip install trulens-eval
+```
+
+### 基本的なルールベース評価
+```python
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+
+class TruLensRuleBased:
+    def __init__(self):
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    def context_relevance(self, question, contexts):
+        """
+        コンテキストの関連性をコサイン類似度で評価
+        """
+        question_emb = self.model.encode([question])
+        context_embs = self.model.encode(contexts)
+        
+        similarities = cosine_similarity(question_emb, context_embs)[0]
+        return float(np.mean(similarities))
+    
+    def groundedness(self, response, contexts):
+        """
+        回答がコンテキストに基づいているかを評価
+        """
+        response_emb = self.model.encode([response])
+        context_embs = self.model.encode(contexts)
+        
+        max_similarity = np.max(cosine_similarity(response_emb, context_embs)[0])
+        return float(max_similarity)
+    
+    def answer_relevance(self, question, answer):
+        """
+        回答の関連性を評価
+        """
+        question_emb = self.model.encode([question])
+        answer_emb = self.model.encode([answer])
+        
+        similarity = cosine_similarity(question_emb, answer_emb)[0][0]
+        return float(similarity)
+
+# 使用例
+evaluator = TruLensRuleBased()
+
+question = "What is the capital of France?"
+contexts = ["Paris is the capital of France", "France is in Europe"]
+answer = "The capital of France is Paris"
+
+context_score = evaluator.context_relevance(question, contexts)
+grounded_score = evaluator.groundedness(answer, contexts)
+relevance_score = evaluator.answer_relevance(question, answer)
+
+print(f"Context Relevance: {context_score:.3f}")
+print(f"Groundedness: {grounded_score:.3f}")
+print(f"Answer Relevance: {relevance_score:.3f}")
+```
+
+## 4. Haystack 評価
+
+### インストール
+```bash
+pip install haystack-ai
+```
+
+### パイプライン評価
+```python
+from haystack import Pipeline
+from haystack.components.evaluators import SASEvaluator, ContextRelevanceEvaluator
+import pandas as pd
+
+def haystack_evaluation():
+    # サンプルデータ
+    eval_data = [
+        {
+            "question": "What is Python?",
+            "contexts": ["Python is a programming language"],
+            "response": "Python is a high-level language",
+            "ground_truth": "Python is a programming language"
+        }
+    ]
+    
+    # Context Relevance評価（非LLM）
+    context_evaluator = ContextRelevanceEvaluator()
+    
+    results = []
+    for item in eval_data:
+        # コンテキストの関連性評価
+        relevance_result = context_evaluator.run(
+            questions=[item["question"]],
+            contexts=[item["contexts"]]
+        )
+        
+        results.append({
+            "question": item["question"],
+            "context_relevance": relevance_result["score"][0]
+        })
+    
+    return pd.DataFrame(results)
+
+# 実行
+# results_df = haystack_evaluation()
+# print(results_df)
+```
+
+### カスタム評価コンポーネント
+```python
+from haystack import component
+from typing import List
+import numpy as np
+
+@component
+class CustomRAGEvaluator:
+    """
+    カスタムRAG評価コンポーネント
+    """
+    
+    @component.output_types(scores=List[float])
+    def run(self, predictions: List[str], references: List[str]) -> dict:
+        scores = []
+        
+        for pred, ref in zip(predictions, references):
+            # BLEU-like簡易スコア
+            pred_words = set(pred.lower().split())
+            ref_words = set(ref.lower().split())
+            
+            if len(ref_words) == 0:
+                score = 0.0
+            else:
+                intersection = len(pred_words.intersection(ref_words))
+                score = intersection / len(ref_words)
+            
+            scores.append(score)
+        
+        return {"scores": scores}
+
+# パイプラインに組み込み
+pipeline = Pipeline()
+pipeline.add_component("evaluator", CustomRAGEvaluator())
+
+# 評価実行
+eval_result = pipeline.run({
+    "evaluator": {
+        "predictions": ["Python is a language"],
+        "references": ["Python is a programming language"]
+    }
+})
+
+print(f"Custom Evaluation Score: {eval_result['evaluator']['scores'][0]:.3f}")
+```
+
+## 5. ir-measures
+
+### インストール
+```bash
+pip install ir-measures
+```
+
+### 基本的な情報検索メトリクス
+```python
+import ir_measures
+from ir_measures import *
+
+def evaluate_with_ir_measures():
+    # qrels (relevance judgments)
+    qrels = [
+        {'query_id': 'q1', 'doc_id': 'd1', 'relevance': 1},
+        {'query_id': 'q1', 'doc_id': 'd2', 'relevance': 0},
+        {'query_id': 'q1', 'doc_id': 'd3', 'relevance': 1},
+        {'query_id': 'q2', 'doc_id': 'd4', 'relevance': 1},
+    ]
+    
+    # run (system results)
+    run = [
+        {'query_id': 'q1', 'doc_id': 'd1', 'score': 0.9},
+        {'query_id': 'q1', 'doc_id': 'd3', 'score': 0.8},
+        {'query_id': 'q1', 'doc_id': 'd2', 'score': 0.7},
+        {'query_id': 'q2', 'doc_id': 'd4', 'score': 0.95},
+    ]
+    
+    # 評価実行
+    metrics = [nDCG@10, P@5, P@10, AP, RR]
+    results = ir_measures.calc_aggregate(metrics, qrels, run)
+    
+    for metric, score in results.items():
+        print(f"{metric}: {score:.4f}")
+    
+    return results
+
+# 実行例
+results = evaluate_with_ir_measures()
+```
+
+### 詳細なメトリクス計算
+```python
+import ir_measures
+from collections import defaultdict
+
+def detailed_ir_evaluation():
+    # より複雑な評価データ
+    qrels = []
+    run = []
+    
+    # 複数クエリのデータ生成
+    for q_id in range(1, 4):
+        for d_id in range(1, 11):
+            # ランダムな関連性
+            relevance = 1 if (d_id % 3 == 0) else 0
+            qrels.append({
+                'query_id': f'q{q_id}',
+                'doc_id': f'd{d_id}',
+                'relevance': relevance
+            })
+            
+            # スコア（関連文書により高いスコア）
+            base_score = 0.5 + (10 - d_id) * 0.05
+            if relevance == 1:
+                base_score += 0.2
+            
+            run.append({
+                'query_id': f'q{q_id}',
+                'doc_id': f'd{d_id}',
+                'score': base_score
+            })
+    
+    # 複数メトリクスでの評価
+    metrics = [
+        nDCG@5, nDCG@10,
+        P@1, P@5, P@10,
+        AP, RR,
+        Judged@10
+    ]
+    
+    # 集約結果
+    agg_results = ir_measures.calc_aggregate(metrics, qrels, run)
+    print("=== Aggregate Results ===")
+    for metric, score in agg_results.items():
+        print(f"{metric}: {score:.4f}")
+    
+    # クエリ別結果
+    per_query_results = ir_measures.calc_aggregate(metrics, qrels, run, return_mean=False)
+    print("\n=== Per-Query Results ===")
+    for query_id in ['q1', 'q2', 'q3']:
+        print(f"\nQuery {query_id}:")
+        for metric in metrics:
+            score = per_query_results.get(metric, {}).get(query_id, 0.0)
+            print(f"  {metric}: {score:.4f}")
+
+# 実行
+detailed_ir_evaluation()
+```
+
+## 6. pytrec_eval
+
+### インストール
+```bash
+pip install pytrec_eval
+```
+
+### 基本的な使用方法
+```python
+import pytrec_eval
+import json
+
+def evaluate_with_pytrec_eval():
+    # qrels形式のデータ
+    qrel = {
+        'q1': {
+            'd1': 1,  # relevant
+            'd2': 0,  # not relevant
+            'd3': 1,  # relevant
+            'd4': 0,
+        },
+        'q2': {
+            'd1': 0,
+            'd2': 1,
+            'd3': 1,
+            'd4': 1,
+        }
+    }
+    
+    # run形式のデータ
+    run = {
+        'q1': {
+            'd1': 0.9,
+            'd2': 0.8,
+            'd3': 0.7,
+            'd4': 0.6,
+        },
+        'q2': {
+            'd1': 0.85,
+            'd2': 0.95,
+            'd3': 0.75,
+            'd4': 0.65,
+        }
+    }
+    
+    # 評価器作成
+    evaluator = pytrec_eval.RelevanceEvaluator(
+        qrel, 
+        {'map', 'ndcg', 'P_5', 'P_10', 'recip_rank'}
+    )
+    
+    # 評価実行
+    results = evaluator.evaluate(run)
+    
+    print("=== PyTREC Eval Results ===")
+    print(json.dumps(results, indent=2))
+    
+    # 平均値計算
+    metrics = ['map', 'ndcg', 'P_5', 'P_10', 'recip_rank']
+    averages = {}
+    
+    for metric in metrics:
+        scores = [results[qid][metric] for qid in results.keys()]
+        averages[metric] = sum(scores) / len(scores)
+    
+    print("\n=== Average Scores ===")
+    for metric, avg_score in averages.items():
+        print(f"{metric}: {avg_score:.4f}")
+    
+    return results, averages
+
+# 実行
+results, averages = evaluate_with_pytrec_eval()
+```
+
+### パラメータ付きメトリクス
+```python
+def advanced_pytrec_eval():
+    # より複雑なqrels（グレード関連性）
+    qrel = {
+        'q1': {
+            'd1': 3,  # highly relevant
+            'd2': 2,  # relevant
+            'd3': 1,  # somewhat relevant
+            'd4': 0,  # not relevant
+            'd5': 2,
+        }
+    }
+    
+    run = {
+        'q1': {
+            'd1': 0.95,
+            'd2': 0.85,
+            'd3': 0.75,
+            'd4': 0.65,
+            'd5': 0.55,
+        }
+    }
+    
+    # パラメータ付きメトリクス
+    measures = {
+        'ndcg_cut_5',
+        'ndcg_cut_10',
+        'P_5',
+        'P_10',
+        'map_cut_5',
+        'map_cut_10',
+        'recip_rank'
+    }
+    
+    evaluator = pytrec_eval.RelevanceEvaluator(qrel, measures)
+    results = evaluator.evaluate(run)
+    
+    print("=== Advanced PyTREC Eval Results ===")
+    for qid, metrics in results.items():
+        print(f"Query {qid}:")
+        for metric, score in metrics.items():
+            print(f"  {metric}: {score:.4f}")
+
+# 実行
+advanced_pytrec_eval()
+```
+
+## 7. ranx
+
+### インストール
+```bash
+pip install ranx
+```
+
+### 基本的な評価
+```python
+from ranx import Qrels, Run, evaluate
+
+def evaluate_with_ranx():
+    # Qrels作成
+    qrels_dict = {
+        "q_1": {"d_12": 5, "d_25": 3, "d_11": 2, "d_22": 1},
+        "q_2": {"d_12": 1, "d_11": 2, "d_25": 1},
+    }
+    qrels = Qrels(qrels_dict)
+    
+    # Run作成
+    run_dict = {
+        "q_1": {"d_12": 0.9, "d_25": 0.8, "d_11": 0.7, "d_22": 0.6, "d_10": 0.5},
+        "q_2": {"d_25": 0.9, "d_12": 0.8, "d_11": 0.7, "d_22": 0.6},
+    }
+    run = Run(run_dict)
+    
+    # 評価
+    metrics = ["map@100", "mrr@100", "ndcg@10", "precision@5", "recall@100"]
+    results = evaluate(qrels, run, metrics)
+    
+    print("=== Ranx Evaluation Results ===")
+    for metric, score in results.items():
+        print(f"{metric}: {score:.4f}")
+    
+    return results
+
+# 実行
+results = evaluate_with_ranx()
+```
+
+### 複数システムの比較
+```python
+from ranx import Qrels, Run, evaluate, compare
+
+def compare_systems_with_ranx():
+    # 共通のqrels
+    qrels_dict = {
+        "q_1": {"d_12": 5, "d_25": 3, "d_11": 2},
+        "q_2": {"d_12": 1, "d_11": 2, "d_25": 1},
+        "q_3": {"d_25": 3, "d_11": 1, "d_12": 2},
+    }
+    qrels = Qrels(qrels_dict)
+    
+    # システム1のrun
+    run1_dict = {
+        "q_1": {"d_12": 0.9, "d_25": 0.8, "d_11": 0.7},
+        "q_2": {"d_25": 0.9, "d_12": 0.8, "d_11": 0.7},
+        "q_3": {"d_25": 0.95, "d_11": 0.85, "d_12": 0.75},
+    }
+    run1 = Run(run1_dict, name="BM25")
+    
+    # システム2のrun
+    run2_dict = {
+        "q_1": {"d_25": 0.95, "d_12": 0.85, "d_11": 0.75},
+        "q_2": {"d_12": 0.9, "d_25": 0.8, "d_11": 0.7},
+        "q_3": {"d_11": 0.9, "d_25": 0.8, "d_12": 0.7},
+    }
+    run2 = Run(run2_dict, name="TF-IDF")
+    
+    # 比較
+    metrics = ["map@100", "ndcg@10", "precision@5"]
+    comparison = compare(
+        qrels=qrels,
+        runs=[run1, run2],
+        metrics=metrics,
+        max_p=0.05  # 有意性検定のp値
+    )
+    
+    print("=== System Comparison ===")
+    print(comparison)
+    
+    return comparison
+
+# 実行
+comparison = compare_systems_with_ranx()
+```
+
+## 8. sentence-transformers評価
+
+### インストール
+```bash
+pip install sentence-transformers
+```
+
+### Information Retrieval Evaluator
+```python
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.evaluation import InformationRetrievalEvaluator
+import logging
+
+def evaluate_with_sentence_transformers():
+    # モデル読み込み
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    # 評価データセット準備
+    corpus = {
+        'doc1': 'Python is a programming language',
+        'doc2': 'Machine learning uses algorithms',
+        'doc3': 'Data science involves statistics',
+        'doc4': 'AI is artificial intelligence',
+        'doc5': 'Neural networks are ML models'
+    }
+    
+    queries = {
+        'q1': 'What is Python?',
+        'q2': 'How does ML work?',
+        'q3': 'What is AI?'
+    }
+    
+    relevant_docs = {
+        'q1': {'doc1'},
+        'q2': {'doc2', 'doc5'},
+        'q3': {'doc4'}
+    }
+    
+    # Information Retrieval Evaluator作成
+    ir_evaluator = InformationRetrievalEvaluator(
+        queries=list(queries.values()),
+        corpus=list(corpus.values()),
+        relevant_docs=list(relevant_docs.values()),
+        corpus_chunk_size=5,
+        mrr_at_k=[5, 10],
+        ndcg_at_k=[5, 10],
+        accuracy_at_k=[1, 3, 5],
+        precision_recall_at_k=[1, 3, 5],
+        map_at_k=[5, 10]
+    )
+    
+    # 評価実行
+    output_path = "ir_evaluation_results.csv"
+    score = ir_evaluator(model, output_path=output_path)
+    
+    print(f"IR Evaluation Score: {score:.4f}")
+    
+    return score
+
+# 実行
+# score = evaluate_with_sentence_transformers()
+```
+
+### カスタム類似度評価
+```python
+from sentence_transformers import SentenceTransformer
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+class CustomSentenceTransformersEvaluator:
+    def __init__(self, model_name='all-MiniLM-L6-v2'):
+        self.model = SentenceTransformer(model_name)
+    
+    def evaluate_similarity(self, sentences1, sentences2):
+        """
+        文章ペアの類似度評価
+        """
+        embeddings1 = self.model.encode(sentences1)
+        embeddings2 = self.model.encode(sentences2)
+        
+        similarities = cosine_similarity(embeddings1, embeddings2)
+        return np.diag(similarities)
+    
+    def evaluate_retrieval(self, queries, documents, relevant_docs):
+        """
+        検索精度評価
+        """
+        query_embeddings = self.model.encode(queries)
+        doc_embeddings = self.model.encode(documents)
+        
+        # 類似度計算
+        similarities = cosine_similarity(query_embeddings, doc_embeddings)
+        
+        results = {}
+        for i, query in enumerate(queries):
+            # 類似度順でソート
+            doc_scores = similarities[i]
+            ranked_indices = np.argsort(doc_scores)[::-1]
+            
+            # Precision@K, Recall@K計算
+            relevant_set = relevant_docs[i]
+            
+            precision_at_k = {}
+            recall_at_k = {}
+            
+            for k in [1, 3, 5]:
+                top_k_indices = ranked_indices[:k]
+                retrieved_relevant = len([idx for idx in top_k_indices if idx in relevant_set])
+                
+                precision_at_k[f'P@{k}'] = retrieved_relevant / k if k > 0 else 0
+                recall_at_k[f'R@{k}'] = retrieved_relevant / len(relevant_set) if len(relevant_set) > 0 else 0
+            
+            results[f'query_{i}'] = {**precision_at_k, **recall_at_k}
+        
+        return results
+
+# 使用例
+evaluator = CustomSentenceTransformersEvaluator()
+
+# 類似度評価
+sentences1 = ["Python is great", "Machine learning is fun"]
+sentences2 = ["Python is a language", "ML uses algorithms"]
+similarities = evaluator.evaluate_similarity(sentences1, sentences2)
+print("Similarities:", similarities)
+
+# 検索評価
+queries = ["What is Python?", "How does ML work?"]
+documents = ["Python programming", "ML algorithms", "Data science", "Python language"]
+relevant_docs = [{0, 3}, {1}]  # クエリごとの関連文書インデックス
+
+retrieval_results = evaluator.evaluate_retrieval(queries, documents, relevant_docs)
+print("Retrieval Results:", retrieval_results)
+```
+
+## 9. scikit-learn評価
+
+### 基本的なメトリクス
+```python
+from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy a
