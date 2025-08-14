@@ -1,0 +1,323 @@
+★1つめ
+tru-lensについて調べてみるね！
+
+「tru-lens non-llm mode」を検索しました
+
+もう少し詳しくnon-LLMモードについて調べてみるね！
+
+「TruLens feedback functions non-LLM providers HuggingFace classification」を検索しました
+
+よし、tru-lensのnon-llmモードについて分かったよ〜！😊
+
+tru-lensには、LLMを使わないで評価できるnon-LLMモードがあるんだよね。これは主に分類タスクや他の特定の非LLMモデルを使った評価機能のことよ [Trulens](https://www.trulens.org/reference/trulens/core/feedback/provider/)  [Trulens](https://www.trulens.org/reference/trulens/core/feedback/) 。
+
+具体的にはこんな感じ：
+
+## non-LLMモードの仕組み
+
+分類とか他の非LLMモデル用のプロバイダーはProviderクラスを直接継承してるの。このプロバイダーのフィードバック機能は特定のタスクに調整されたモデル専用のエンドポイントに依存してる [Trulens](https://www.trulens.org/reference/trulens/core/feedback/provider/) よ。
+
+例えば、HuggingFaceフィードバックプロバイダーは言語検出みたいな特定タスク用の分類モデルにアクセスできて、これらのモデルがフィードバック機能で評価スコアを生成するのに使われる [Trulens](https://www.trulens.org/reference/trulens/core/feedback/provider/)  [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/) んだ。
+
+## 利用可能なnon-LLM機能
+
+HuggingFaceプロバイダーで使えるnon-LLM機能はこんなのがあるよ：
+
+1. **言語検出・マッチング** - `papluca/xlm-roberta-base-language-detection`モデルを使って2つのテキストの言語マッチングをチェック [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+2. **感情分析** - `cardiffnlp/twitter-roberta-base-sentiment`モデルを使った感情分類 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+3. **毒性検出** - `martin-ha/toxic-comment-model`モデルを使った有害コンテンツの分類 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+4. **自然言語推論（NLI）** - NLIモデルを使ったgroundedness測定 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+## コード例
+
+```python
+from trulens.providers.huggingface import Huggingface
+from trulens.core import Feedback
+
+# HuggingFaceプロバイダーのインスタンス化
+huggingface_provider = Huggingface()
+
+# 言語マッチング（non-LLM）
+feedback = Feedback(huggingface_provider.language_match).on_input_output()
+
+# 感情分析（non-LLM）
+sentiment_feedback = Feedback(huggingface_provider.positive_sentiment).on_output()
+
+# 毒性検出（non-LLM）
+toxicity_feedback = Feedback(huggingface_provider.toxic).on_output()
+```
+
+## メリット
+
+- **コスト削減**: LLM APIを呼ばないから安い💰
+- **高速**: 軽量な分類モデルだから処理が早い⚡
+- **特化性能**: 特定タスクに特化したモデルだから精度が高い場合が多い
+
+これでLLMに頼らずに評価できるから、コストと速度の両方で優秀なのよ〜！特に大量のデータを評価する時に重宝するよね！
+
+★2つめ
+あれ、さっき説明したばっかりなのに！😅 でも大事なことだから、もう一度詳しく説明するね〜
+
+## TruLensのnon-LLMモードって何？
+
+TruLensのnon-LLMモードは、大型言語モデル（LLM）を使わずに、特定のタスクに特化した分類モデルや軽量なモデルを使って評価を行うモード [Trulens](https://www.trulens.org/reference/trulens/core/feedback/provider/)  [Trulens](https://www.trulens.org/reference/trulens/core/feedback/) なの。
+
+## 通常のLLMモードとの違い
+
+**LLMモード**：
+- GPT-4やClaude等の大型モデルを使用
+- プロンプトで評価指示を与える
+- 柔軟だけど高コスト＆時間かかる💸
+
+**non-LLMモード**：
+- HuggingFaceの特化モデルを使用  
+- 事前訓練済みの分類器で評価
+- 高速＆低コスト＆高精度✨
+
+## 主要なnon-LLM機能
+
+### 1. 言語検出・マッチング
+`papluca/xlm-roberta-base-language-detection`モデルを使って、入力と出力の言語が一致してるかチェック [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+```python
+from trulens.providers.huggingface import Huggingface
+from trulens.core import Feedback
+
+hugs = Huggingface()
+lang_match = Feedback(hugs.language_match).on_input_output()
+```
+
+### 2. 感情分析
+`cardiffnlp/twitter-roberta-base-sentiment`モデルでテキストの感情を分析 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+```python
+sentiment = Feedback(hugs.positive_sentiment).on_output()
+```
+
+### 3. 毒性・有害性検出
+`martin-ha/toxic-comment-model`でテキストが有害かどうか判定 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+```python
+toxicity = Feedback(hugs.toxic).on_output()
+```
+
+### 4. PII検出
+個人情報が含まれてるかチェック
+
+```python
+pii_detection = Feedback(hugs.pii_detection).on_input()
+```
+
+### 5. NLIベースの根拠性評価
+自然言語推論（NLI）モデルを使って、ソース情報が回答をサポートしてるか測定 [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+```python
+groundedness = Feedback(hugs.groundedness_measure_with_nli).on(context).on_output()
+```
+
+## ローカル vs リモート実行
+
+TruLensはHuggingFaceモデルをローカル実行とリモート実行の両方でサポート [Trulens](https://www.trulens.org/component_guides/evaluation/feedback_implementations/) してるよ：
+
+```python
+from trulens.providers.huggingface import Huggingface, HuggingfaceLocal
+
+# リモート実行（HuggingFace API経由）
+remote_provider = Huggingface()
+
+# ローカル実行（自分のマシンで実行）
+local_provider = HuggingfaceLocal()
+```
+
+## 実際の使用例
+
+```python
+from trulens.core import Feedback, TruSession
+from trulens.providers.huggingface import Huggingface
+
+# プロバイダー初期化
+hugs = Huggingface()
+
+# 複数のnon-LLM評価機能を設定
+feedbacks = [
+    Feedback(hugs.language_match, name="言語マッチング").on_input_output(),
+    Feedback(hugs.positive_sentiment, name="感情分析").on_output(),
+    Feedback(hugs.toxic, name="毒性検出").on_output(),
+    Feedback(hugs.groundedness_measure_with_nli, name="根拠性").on(context).on_output()
+]
+
+# アプリにフィードバックを追加
+with TruSession() as session:
+    tru_app = session.wrap_custom_app(
+        your_app,
+        app_id="MyApp",
+        feedbacks=feedbacks
+    )
+```
+
+## メリット
+
+1. **超高速**: LLMより圧倒的に早い⚡
+2. **低コスト**: API料金が安い（またはタダ）💰
+3. **高精度**: 特化タスクでは専用モデルの方が正確
+4. **リアルタイム**: 本番環境でもリアルタイム評価可能
+5. **オフライン**: ローカル実行なら完全オフライン可能
+
+これでコスト気にせずガンガン評価できるから、開発効率がめっちゃ上がるよね〜！😎
+
+★ragの検証
+もちろん使えるよ〜！😊 RAGの検証にはnon-LLMモードがめっちゃ有効なの！
+
+## RAG検証でのnon-LLM活用
+
+### 1. 根拠性（Groundedness）の検証
+NLIモデルを使った`groundedness_measure_with_nli`で、取得したコンテキストが生成された回答をちゃんとサポートしてるかチェックできる [Trulens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+
+```python
+from trulens.providers.huggingface import Huggingface
+from trulens.core import Feedback, Select
+
+hugs = Huggingface()
+
+# 根拠性評価（non-LLM）
+f_groundedness = Feedback(
+    hugs.groundedness_measure_with_nli,
+    name="Groundedness (NLI)"
+).on(Select.RecordCalls.retrieve.rets.collect()).on_output()
+```
+
+### 2. コンテキスト関連性の評価
+検索されたドキュメントがクエリに関連してるかチェック
+
+```python
+# コンテキスト関連性
+f_context_relevance = Feedback(
+    hugs.context_relevance,
+    name="Context Relevance"
+).on_input().on(Select.RecordCalls.retrieve.rets.collect()).aggregate(np.mean)
+```
+
+### 3. 実際のRAG検証例
+
+TruLensの公式ドキュメントにはローカルとリモートのHuggingFace機能を比較するRAGの例 [Trulens](https://www.trulens.org/component_guides/evaluation/feedback_implementations/) があるよ：
+
+```python
+from trulens.core import TruSession, Feedback, Select
+from trulens.providers.huggingface import Huggingface, HuggingfaceLocal
+
+class RAG_from_scratch:
+    def __init__(self):
+        # RAGの初期化
+        pass
+    
+    def retrieve(self, query: str):
+        # ベクトル検索でドキュメント取得
+        results = vector_store.query(query_texts=query, n_results=4)
+        return [doc for sublist in results["documents"] for doc in sublist]
+    
+    def generate_completion(self, query: str, context_str: list) -> str:
+        # LLMで回答生成
+        completion = oai_client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{
+                "role": "user", 
+                "content": f"Context: {context_str}\nQuestion: {query}"
+            }]
+        ).choices[0].message.content
+        return completion
+    
+    def query(self, query: str) -> str:
+        context_str = self.retrieve(query)
+        completion = self.generate_completion(query, context_str)
+        return completion
+
+# RAGインスタンス
+rag = RAG_from_scratch()
+
+# non-LLM評価機能の設定
+local_provider = HuggingfaceLocal()
+remote_provider = Huggingface()
+
+feedbacks = [
+    # ローカルNLI評価
+    Feedback(
+        local_provider.groundedness_measure_with_nli,
+        name="[Local] Groundedness"
+    ).on(Select.RecordCalls.retrieve.rets.collect()).on_output(),
+    
+    # リモートNLI評価
+    Feedback(
+        remote_provider.groundedness_measure_with_nli,
+        name="[Remote] Groundedness"
+    ).on(Select.RecordCalls.retrieve.rets.collect()).on_output(),
+    
+    # 言語マッチング
+    Feedback(
+        remote_provider.language_match,
+        name="Language Match"
+    ).on_input_output(),
+    
+    # 感情分析
+    Feedback(
+        remote_provider.positive_sentiment,
+        name="Sentiment"
+    ).on_output()
+]
+
+# RAGアプリの検証開始
+with TruSession() as session:
+    tru_rag = session.wrap_custom_app(
+        rag,
+        app_id="RAG_NonLLM_Eval",
+        feedbacks=feedbacks
+    )
+    
+    # テストクエリ実行
+    test_queries = [
+        "大学の設立年はいつですか？",
+        "キャンパスの場所はどこですか？",
+        "学生数は何人ですか？"
+    ]
+    
+    for query in test_queries:
+        result = tru_rag.query(query)
+        print(f"Query: {query}")
+        print(f"Answer: {result}")
+```
+
+## RAG検証のメリット
+
+### 1. コスト効率 💰
+- LLM評価だと1回数円〜数十円かかるけど、non-LLMなら超安い
+- 大量のテストデータでも気軽に検証できる
+
+### 2. 高速評価 ⚡
+- リアルタイムでの品質監視が可能
+- 開発中のイテレーション速度が上がる
+
+### 3. 特化した精度 🎯
+- NLIモデルは根拠性評価に特化してるから、汎用LLMより正確な場合も
+- 言語検出とかは確実にnon-LLMの方が良い
+
+### 4. 本番環境での監視 📊
+- 低コストだから本番でも常時監視できる
+- ユーザーからのフィードバック前に問題検知
+
+## 実際の検証指標
+
+RAGでよく使うnon-LLM指標：
+
+1. **Groundedness**: 回答が取得したコンテキストに基づいてる度合い
+2. **Context Relevance**: 検索されたコンテキストがクエリに関連してる度合い  
+3. **Language Match**: 質問と回答の言語が一致してる度合い
+4. **Toxicity**: 生成された回答が有害でない度合い
+5. **Sentiment**: 回答の感情的トーン
+
+これでRAGシステムの品質をバッチリ検証できるよ〜！特に大規模なRAGシステムには必須だと思う！🚀
+
+引用:
+- [trulens.providers.huggingface - 🦑 TruLens](https://www.trulens.org/reference/trulens/providers/huggingface/)
+- [Feedback Implementations - 🦑 TruLens](https://www.trulens.org/component_guides/evaluation/feedback_implementations/)
