@@ -1,0 +1,102 @@
+pytrec_evalのnon-llmモードについて説明するね！
+
+pytrec_evalは情報検索システムの評価に使われるPythonライブラリで、TRECスタイルの評価指標を計算できるツールなんだ。non-llmモードっていうのは、従来の情報検索評価に特化したモードのことを指してるよ。
+
+## non-llmモードの特徴
+
+**従来の検索評価に最適化**
+- MAP（Mean Average Precision）
+- nDCG（normalized Discounted Cumulative Gain）
+- P@k（Precision at k）
+- Recall@k
+- RBP（Rank-Biased Precision）
+
+**高速処理**
+LLM評価と違って、事前に定義された関連性スコアを使うから処理がめちゃくちゃ早い！大量のクエリとドキュメントペアでも瞬時に評価結果が出るよ。
+
+**標準的なフォーマット対応**
+TRECの標準的なqrelsファイル（関連性判定ファイル）とrunファイル（検索結果ファイル）をそのまま使えるから、既存の評価データセットとの互換性もバッチリ。
+
+## 使い方の例
+
+```python
+import pytrec_eval
+
+# qrelsとrunsの準備
+qrels = {
+    'query1': {'doc1': 1, 'doc2': 0, 'doc3': 1},
+    'query2': {'doc4': 1, 'doc5': 0}
+}
+
+runs = {
+    'query1': {'doc1': 0.9, 'doc2': 0.8, 'doc3': 0.7},
+    'query2': {'doc4': 0.6, 'doc5': 0.5}
+}
+
+# 評価器の作成（これがnon-llmモード）
+evaluator = pytrec_eval.RelevanceEvaluator(qrels, {'map', 'ndcg'})
+
+# 評価実行
+results = evaluator.evaluate(runs)
+```
+
+従来の検索システムやレコメンドシステムの評価には、このnon-llmモードが定番だよ！シンプルで確実、しかも爆速だから研究でも実務でも重宝されてる感じ。
+
+何か他に知りたいことあったら遠慮なく聞いてね〜！
+
+★ragの検証
+もちろんRAGの検証にも使えるよ！むしろRAGシステムの評価には超重要なツールだと思う💪
+
+## RAG評価でのpytrec_evalの活用方法
+
+**検索コンポーネントの評価**
+RAGの検索部分（Retrieval）の性能をガッツリ測定できる！
+```python
+# RAGの検索結果を評価
+qrels = {
+    'query1': {'doc_a': 1, 'doc_b': 1, 'doc_c': 0},  # 正解の関連文書
+    'query2': {'doc_x': 1, 'doc_y': 0, 'doc_z': 1}
+}
+
+retrieval_results = {
+    'query1': {'doc_a': 0.95, 'doc_b': 0.87, 'doc_c': 0.65},  # 検索スコア
+    'query2': {'doc_x': 0.92, 'doc_y': 0.78, 'doc_z': 0.71}
+}
+
+evaluator = pytrec_eval.RelevanceEvaluator(qrels, {
+    'map',           # 平均精度
+    'ndcg_cut_10',   # 上位10件のnDCG
+    'recall_10',     # 上位10件のRecall
+    'P_5'           # 上位5件のPrecision
+})
+
+results = evaluator.evaluate(retrieval_results)
+```
+
+**RAG特有の評価ポイント**
+
+1. **上位K件の精度が重要**
+   - RAGは通常上位数件しか使わないから、`P@5`や`nDCG@10`みたいな指標が超大事
+   
+2. **Recallの重要性**
+   - 必要な情報を取りこぼすとLLMが正しく回答できないから、適切なRecall値の確保が必須
+
+3. **段階的評価**
+   ```python
+   # 異なるchunk戦略での比較
+   strategies = ['sentence_split', 'paragraph_split', 'semantic_split']
+   
+   for strategy in strategies:
+       results = evaluator.evaluate(strategy_results[strategy])
+       print(f"{strategy}: MAP={results['map']:.3f}")
+   ```
+
+**実際のRAG評価フロー**
+1. 質問セットと正解文書のペアを準備（qrels作成）
+2. RAGシステムで検索実行
+3. pytrec_evalで検索性能を測定
+4. 異なる設定（埋め込みモデル、chunk戦略など）で比較
+
+これで検索部分の性能がバッチリ分かるから、RAGシステム全体の改善につながるよ！検索が微妙だと、どんなに優秀なLLMでも良い回答は生成できないからね〜
+
+他にRAG評価で気になることあったら何でも聞いて！
