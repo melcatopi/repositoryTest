@@ -1,0 +1,120 @@
+★ranxのnon-llmモードについて調べてみるね！
+
+「ranx non-llm mode」を検索しました
+
+あれ〜？検索結果を見る限り、ranxライブラリの「non-llmモード」については具体的な情報が見つからないなぁ。ranxは情報検索（IR）とランキング評価のためのPythonライブラリだってことは分かったけど、non-llmモードという特定の機能については詳しい情報がないね😅
+
+もう少し具体的に調べてみるよ！
+
+「ranx library non llm mode python」を検索しました
+
+まだranxの具体的な「non-llmモード」については見つからないな〜😅 GitHubの公式ページにアクセスして詳細を確認してみるね！
+
+Fetched: GitHub - AmenRa/ranx: ⚡️A Blazing-Fast Python Library for Ranking Evaluation, Comparison, and Fusion 🐍
+
+GitHubページも確認したけど、やっぱり「non-llmモード」って機能については触れられてないな〜😅 
+
+でも、ちょっと待って！もしかして君が聞いてるのは「ranx」ライブラリではなくて、別のコンテキストかもしれないね？例えば：
+
+1. **ranx** - 情報検索の評価ライブラリ（今調べたやつ）
+2. 何か別のツールや設定での「non-llmモード」
+
+ranxは情報検索やレコメンドシステムの評価とランキング比較のためのPythonライブラリで、NumbaやNumPyを使った高速なベクトル操作と自動並列化を提供しているんだけど、特に「non-llmモード」という機能は見つからなかった😔
+
+もしかして別のライブラリやツールのことを聞いてる？それとも何か特定のアプリケーションやシステムでの設定の話？もう少し詳しく教えてくれる？
+
+例えば：
+- どこでこの「ranxのnon-llmモード」について聞いたか
+- どんな目的で使おうとしてるか
+- 他に関連する情報があるか
+
+そうしたらもっと具体的に調べられるよ！💪
+
+
+★SenTrEv
+SenTrEvのnon-llmモードについて調べてみるね！
+
+「SenTrEv non-llm mode」を検索しました
+
+あれ、検索結果見る限りSenTrEvってSentence Transformers Evaluator の略で、RAG（Retrieval Augmented Generation）システムでのPDFドキュメントに対する埋め込みモデルの評価を行うPythonパッケージ [PyPI](https://pypi.org/project/sentrev/) みたいだね！
+
+でも「non-llmモード」についての具体的な情報が見つからなかったから、もう少し詳しく調べてみるよ〜
+
+「SenTrEv non-llm evaluation mode sentence transformers」を検索しました
+
+おお、GitHubの方見つけた！もう少し詳しい情報を取得してみるね〜
+
+Fetched: GitHub - AstraBert/SenTrEv: Simple customizable evaluation for text retrieval performance of Sentence Transformers embedders on PDFs
+
+うーん、GitHubのREADME見ても「non-llmモード」については具体的に書いてないなぁ...😅
+
+ドキュメントやソースコードをもう少し詳しく見てみるね！
+
+「"SenTrEv" "non-llm" "non llm" evaluation mode」を検索しました
+
+「SenTrEv documentation evaluation methods」を検索しました
+
+うーん、今度の検索でもSenTrEvの「non-llmモード」についての具体的な説明は見つからなかったよ...😰
+
+でも、調べた内容から分かったことをまとめてみるね！
+
+**SenTrEvについて:**
+
+SenTrEv（Sentence Transformers Evaluator）は、RAG（Retrieval Augmented Generation）システムでテキストベースの文書に対する最適な埋め込みモデルを選ぶための簡単な評価テストを実行するPythonパッケージ [Libraries.io](https://libraries.io/pypi/sentrev) なんだ！
+
+**SenTrEvが対応してるもの:**
+- Dense（密）テキストエンコーダー/埋め込み（sentence_transformersパッケージのSentenceTransformerクラス経由） [Libraries.io](https://libraries.io/pypi/sentrev)
+- Sparse（疎）テキストエンコーダー/埋め込み（fastembedパッケージのSparseTextEmbeddingsクラス経由） [Libraries.io](https://libraries.io/pypi/sentrev)
+- PDF、PPTX、DOCX、HTML、CSV、XMLドキュメント（単一・複数アップロード対応） [Libraries.io](https://libraries.io/pypi/sentrev)
+
+**評価の流れ:**
+PDFテキスト抽出・チャンク化フェーズの後、チャンクはユーザー定義可能な割合（デフォルト25%）に従って削減され、各チャンクのランダムな部分から抽出される [Libraries.io](https://libraries.io/pypi/sentrev) って感じでやってる！
+
+でも「non-llmモード」については、残念ながら公開されてる資料には具体的な記載が見つからなかったわ...😢
+
+もしかしたらこれって：
+1. 最新機能でまだドキュメント化されてない
+2. 内部的な設定オプション
+3. LLMを使わない純粋な埋め込みベースの評価モード
+
+のどれかかもしれないね！
+
+正確な情報が欲しかったら、SenTrEvのGitHubリポジトリにIssueで質問するか、開発者に直接聞くのが一番確実だと思うよ〜！💭
+
+
+★NLTK
+NLTK（Natural Language Toolkit）の「non-LLMモード」について調べてみるね！
+
+「NLTK non-LLM mode natural language toolkit」を検索しました
+
+あー、ちょっと待って！検索結果を見ると、どうやら「NLTK non-LLMモード」っていう特別なモードは見つからないかも...🤔
+
+でも検索結果から分かることをまとめてみるね！
+
+「"NLTK non-LLM" "non-LLM mode" traditional NLP」を検索しました
+
+うーん、やっぱり「NLTK non-LLMモード」っていう明確な機能は存在しないみたい😅
+
+でも、きっと君が聞きたいのは、LLMじゃない従来のNLP手法についてじゃない？NLTKは元々LLMが登場する前から存在してるライブラリで、まさに「non-LLM」的なアプローチを提供してるんだよ！
+
+**NLTKの従来的（non-LLM）なアプローチ：**
+
+✨ **ルールベースの処理**
+- 正規表現を使ったパターンマッチング
+- 品詞タグ付け（POS tagging）
+- 構文解析（parsing）
+
+✨ **統計的手法**
+- トークン化（tokenization）
+- ステミング・レンマ化
+- N-gram分析
+- TF-IDF
+
+✨ **機械学習（でもLLMじゃない）**
+- ナイーブベイズ分類器
+- 決定木
+- SVM
+
+これらの手法は、大規模な言語モデルを使わずに、言語の構造やルールを明示的にプログラムしたり、比較的小さなデータセットで学習できる統計的手法を使ったりするんだ。
+
+要するに、NLTK自体が「non-LLM」的なツールキットってことかな！もし特定の用途があるなら、もう少し詳しく教えてくれる？
