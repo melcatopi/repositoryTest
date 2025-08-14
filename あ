@@ -1,0 +1,72 @@
+あー、Gemma-2b-itでCPUオンリーなんだ！了解〜！
+2Bモデルならメモリも優しいし、CPUでも全然イケるね！
+
+CPUでGemmaを動かすなら、こんな感じでやってみて！
+
+**1. 一番シンプルな方法（transformers直接）：**
+```python
+from litellm import completion
+import os
+
+# モデルのパス設定
+os.environ["HUGGINGFACE_MODEL_PATH"] = "c:/pythonF/model"
+
+response = completion(
+    model="huggingface/c:/pythonF/model",
+    messages=[{"role": "user", "content": "こんにちは！"}],
+    # CPU用の設定
+    device="cpu",
+    torch_dtype="float32",  # CPUならfloat32が安定
+    max_tokens=256,
+)
+
+print(response.choices[0].message.content)
+```
+
+**2. もしエラー出たら、こっちの方法試して：**
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from litellm import completion
+
+# 先にモデルとトークナイザー読み込み
+model = AutoModelForCausalLM.from_pretrained(
+    "c:/pythonF/model",
+    device_map="cpu",
+    torch_dtype="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained("c:/pythonF/model")
+
+# カスタムモデルとして使う
+response = completion(
+    model="huggingface/custom",
+    messages=[{"role": "user", "content": "テストだよ〜"}],
+    custom_llm_provider="huggingface",
+    model_obj=model,
+    tokenizer=tokenizer,
+)
+```
+
+**3. Ollama使うのもアリ（CPU最適化されてる！）：**
+まずGemmaをGGUF形式に変換して、Ollamaで動かす方法もあるよ！
+
+```bash
+# Ollamaインストール後
+ollama pull gemma:2b
+# または自分のモデル登録
+```
+
+```python
+response = completion(
+    model="ollama/gemma:2b",
+    messages=[{"role": "user", "content": "やっほー！"}],
+    api_base="http://localhost:11434"
+)
+```
+
+**必要なパッケージ：**
+```bash
+pip install litellm transformers torch accelerate sentencepiece
+```
+
+CPUだと推論ちょっと時間かかるかもだけど、2Bなら全然実用的だよ！
+試してみてうまくいかなかったら教えて〜！エラーメッセージとか見せてくれたらもっと具体的にアドバイスできるから！🚀
