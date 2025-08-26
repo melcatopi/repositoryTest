@@ -1,0 +1,87 @@
+C# の Windows Forms 向けに、GrapeCity（ComponentOne の Spread など）に似た高機能なグリッドコンポーネントを無料で使えるものをお探しですね。いくつか有望なオープンソースや無料の選択肢がありますので、ご紹介します。
+
+
+---
+
+無料またはオープンソースの WinForms グリッドコントロール
+
+1. SourceGrid
+
+Windows Forms 向けのオープンソースのグリッドコントロールで、完全に C# で記述されています。
+
+仮想グリッド、カスタムセルやエディタ、高度なフォーマットなど多彩な機能を備えています。
+
+
+
+2. ObjectListView
+
+ListView ベースですが、DataListView（データバインディングを伴う ListView）として使え、豊富な機能を持っています。
+
+フィルタリング、ソート、カスタム行フォーマット、状態の保存などが可能。Slant でも高評価です。
+
+
+
+3. Krypton Suite
+
+Component Factory 提供のスタイリングコンポーネント群。もともとは有料でしたが、現在は GitHub 上で無料で公開されています。
+
+
+
+4. DynamicGrid
+
+GitHub 上で公開されている高パフォーマンスのレンダリングエンジン。
+
+仮想モードで必要なセルのみ描画し、高速スクロールが可能。軽量かつ高速ですが、カラム管理などの基本機能は別途実装が必要です。
+
+
+
+5. CuoreUI.Winforms
+
+Windows Forms 向けにモダンな見た目の UI コントロールを提供するライブラリで、フリーかつ軽量。
+
+アニメーションやブラーエフェクト、丸みのあるフォームなど現代的な UI を目指す場合に有効です。
+
+
+
+6. Advanced DataGridView
+
+「.NET WinForms DataGridView を拡張したコントロール」で、フィルターやソートなどの拡張機能を備えています。
+
+`.NET WinForms 向けライブラリ一覧（awesome-dotnet-winforms）」にも掲載されています。
+
+
+
+
+---
+
+比較一覧表
+
+コンポーネント名	種類	主な特徴
+
+SourceGrid	オープンソース	完全 C#／仮想グリッド／カスタムセル対応
+ObjectListView	オープンソース	ListView ベース／豊富な機能／バインディング対応
+Krypton Suite	オープンソース	スタイリング強化／美しい UI
+DynamicGrid	オープンソース	高速／仮想レンダリング／高速スクロール対応
+CuoreUI.Winforms	フリー／軽量	モダン UI／アニメーション・エフェクト対応
+Advanced DataGridView	オープンソース	DataGridView 拡張／フィルタ・ソートなど対応
+
+
+
+---
+
+用途に合わせたおすすめ：
+
+大量データ＋高速描画重視なら → DynamicGrid や SourceGrid
+
+リッチな UI／スタイリングを求めるなら → Krypton Suite や CuoreUI
+
+標準コントロールのフィルタ／ソート機能を簡単に追加したいなら → Advanced DataGridView
+
+柔軟なビュー表示とカスタマイズ性重視なら → ObjectListView
+
+
+
+---
+
+もし、特定の要件（例：大量データの扱い、ネストした行、Excelっぽい表示、軽量性など）があれば、それに基づいてさらに絞り込みやおすすめも可能です。お気軽にお知らせください！
+
